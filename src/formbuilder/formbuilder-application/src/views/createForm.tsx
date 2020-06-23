@@ -5,7 +5,7 @@ import Section from '../types/Section';
 import SectionRenderer from '../components/formBuilder/SectionRenderer';
 import Form from '../types/Form';
 import { SectionList } from '../types/Form';
-//import * as DND from 'react-beautiful-dnd';
+import * as DND from 'react-beautiful-dnd';
 import './createForm.css';
 
 function CreateForm(): JSX.Element {
@@ -28,9 +28,9 @@ function CreateForm(): JSX.Element {
         setSections(Form.removeSection(sections, index));
     }
 
-    // function onDragEnd(sections: SectionList, result: DND.DropResult) {
-    //     setSections(Form.onDragEnd(sections, result));
-    // }
+    function onDragEnd(result: DND.DropResult) {
+        setSections(Form.onDragEnd(sections, result));
+    }
 
     return (
         <div>
@@ -40,22 +40,63 @@ function CreateForm(): JSX.Element {
                 </Col>
             </Row>
             <Row style={{ margin: '61px 0 0 0' }}>
-                <Col span={24}>
-                    <div style={{ display: 'inline', position: 'relative' }}>
-                        {Object.keys(sections).map((sectionId: string) => {
-                            const section = sections[parseInt(sectionId)];
-                            return (
-                                <SectionRenderer
-                                    key={section.id}
-                                    id={section.id}
-                                    removeSection={() =>
-                                        removeSection(section.id)
-                                    }
-                                />
-                            );
-                        })}
-                    </div>
-                </Col>
+                <DND.DragDropContext onDragEnd={onDragEnd}>
+                    <DND.Droppable droppableId="section" type="section">
+                        {(provided, snapshot) => (
+                            <Col span={24}>
+                                <div
+                                    ref={provided.innerRef}
+                                    style={{
+                                        display: 'inline',
+                                        position: 'relative',
+                                    }}
+                                >
+                                    {Object.keys(sections).map(
+                                        (sectionId: string, index: number) => {
+                                            const section =
+                                                sections[parseInt(sectionId)];
+                                            return (
+                                                <DND.Draggable
+                                                    key={'section' + sectionId}
+                                                    draggableId={
+                                                        'section' + sectionId
+                                                    }
+                                                    index={index}
+                                                >
+                                                    {(provided, snapshot) => (
+                                                        <div
+                                                            ref={
+                                                                provided.innerRef
+                                                            }
+                                                            {...provided.draggableProps}
+                                                        >
+                                                            <SectionRenderer
+                                                                key={section.id}
+                                                                id={section.id}
+                                                                removeSection={() =>
+                                                                    removeSection(
+                                                                        section.id,
+                                                                    )
+                                                                }
+                                                                provided={
+                                                                    provided
+                                                                }
+                                                                section={
+                                                                    section
+                                                                }
+                                                            />
+                                                        </div>
+                                                    )}
+                                                </DND.Draggable>
+                                            );
+                                        },
+                                    )}
+                                </div>
+                                {provided.placeholder}
+                            </Col>
+                        )}
+                    </DND.Droppable>
+                </DND.DragDropContext>
             </Row>
             <Row>
                 <Col span={24}>

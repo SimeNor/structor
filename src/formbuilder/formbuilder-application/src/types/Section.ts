@@ -4,11 +4,17 @@ import InvalidArgumentException from './InvalidArgumentException';
 
 export default class Section implements ISection {
     id: number;
+    title = '';
     questions: Array<Question>;
 
     constructor(id: number, questions?: Array<Question>) {
         this.id = id;
         this.questions = questions ? questions : [];
+    }
+
+    setTitle(title: string): string {
+        this.title = title;
+        return title;
     }
 
     addQuestion(question: Question, index?: number): void {

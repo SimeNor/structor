@@ -19,21 +19,22 @@ export default class Form {
     }
 
     static reorderSections(
-        list: { [sectionNumber: number]: Section },
+        list: SectionList,
         oldIndex: number,
         newIndex: number,
     ): SectionList {
-        if (!(oldIndex && newIndex))
+        if (oldIndex === null || newIndex === null)
             throw new InvalidArgumentException(
                 'Was unable to swap position for question. oldIndex, newIndex or both was undefined \noldIndex: ' +
                     oldIndex +
                     '\nnewIndex: ' +
                     newIndex,
             );
-        const tmpSection = list[oldIndex];
-        list[oldIndex] = list[newIndex];
-        list[newIndex] = tmpSection;
-        return list;
+        const res = { ...list };
+        const tmpSection = res[oldIndex];
+        res[oldIndex] = res[newIndex];
+        res[newIndex] = tmpSection;
+        return res;
     }
 
     static reorderQuestions(
@@ -41,7 +42,7 @@ export default class Form {
         oldIndex: number,
         newIndex: number,
     ): Array<Question> {
-        if (!(oldIndex && newIndex))
+        if (oldIndex === null && newIndex === null)
             throw new InvalidArgumentException(
                 'Was unable to swap position for question. oldIndex, newIndex or both was undefined \noldIndex: ' +
                     oldIndex +
@@ -95,12 +96,14 @@ export default class Form {
         const sourceIndex = result.source.index;
         const destIndex = result.destination.index;
 
-        if (result.type === 'droppableItem') {
+        if (result.type === 'section') {
+            console.log(sectionList);
             sectionList = Form.reorderSections(
                 sectionList,
                 sourceIndex,
                 destIndex,
             );
+            console.log(sectionList);
         } else if (result.type === 'droppableSubItem') {
             const sourceSectionId = parseInt(result.source.droppableId);
             const destSectionId = parseInt(result.destination.droppableId);

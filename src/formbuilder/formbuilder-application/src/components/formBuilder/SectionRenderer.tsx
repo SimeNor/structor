@@ -3,21 +3,31 @@ import { Row, Col, Button, Tooltip } from 'antd';
 import InputField from '../questionComponent/InputField';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import Question from '../questionComponent/Question';
+import * as DND from 'react-beautiful-dnd';
+import Section from '../../types/Section';
 
 type SectionProps = {
     id: number;
     removeSection: () => void;
+    provided: DND.DraggableProvided;
+    section: Section;
 };
 
-function Section({ id, removeSection }: SectionProps): JSX.Element {
+function SectionRenderer({
+    id,
+    removeSection,
+    provided,
+    section,
+}: SectionProps): JSX.Element {
     const [placeholder, setPlaceholder] = useState('Tittel...');
-    const [isSection, setIsSection] = useState(false);
-    const [questions, setQuestions] = useState([0]);
+    const [isSection, setIsSection] = useState(true);
+    const [questions, setQuestions] = useState(section.questions);
+    const [title, setTitle] = useState(section.title);
     const [count, setCount] = useState(0);
 
     function findPlaceholder() {
         if (id === 0) {
-            setIsSection(false);
+            // setIsSection(false);
             setPlaceholder('Tittel...');
             return;
         }
@@ -29,15 +39,15 @@ function Section({ id, removeSection }: SectionProps): JSX.Element {
         findPlaceholder();
     });
 
-    function addQuestion() {
-        questions.push(count + 1);
-        setQuestions(questions);
-        setCount(count + 1);
-    }
+    // function addQuestion() {
+    //     questions.push(count + 1);
+    //     setQuestions(questions);
+    //     setCount(count + 1);
+    // }
 
-    function removeQuestion(questionId: number) {
-        setQuestions(questions.filter((index) => index !== questionId));
-    }
+    // function removeQuestion(questionId: number) {
+    //     setQuestions(questions.filter((index) => index !== questionId));
+    // }
 
     return (
         <div
@@ -72,6 +82,7 @@ function Section({ id, removeSection }: SectionProps): JSX.Element {
                     {isSection && (
                         <Tooltip title="Flytt seksjon">
                             <Button
+                                {...provided.dragHandleProps}
                                 style={{ zIndex: 1, color: 'var(--primary-1)' }}
                                 size="large"
                                 type="link"
@@ -97,7 +108,7 @@ function Section({ id, removeSection }: SectionProps): JSX.Element {
                 <Col span={24}>
                     {questions.map((question, index) => [
                         <hr
-                            key={question}
+                            key={'hr' + question}
                             style={{
                                 color: 'black',
                                 width: '100%',
@@ -105,9 +116,9 @@ function Section({ id, removeSection }: SectionProps): JSX.Element {
                             }}
                         />,
                         <Question
-                            key={question}
+                            key={'question' + question}
                             id={index}
-                            removeQuestion={() => removeQuestion(question)}
+                            removeQuestion={() => null}
                         />,
                     ])}
                 </Col>
@@ -123,7 +134,7 @@ function Section({ id, removeSection }: SectionProps): JSX.Element {
                             type="primary"
                             shape="circle"
                             icon={<PlusOutlined />}
-                            onClick={addQuestion}
+                            // onClick={addQuestion}
                         />
                     </Tooltip>
                 </Col>
@@ -132,4 +143,4 @@ function Section({ id, removeSection }: SectionProps): JSX.Element {
     );
 }
 
-export default Section;
+export default SectionRenderer;
