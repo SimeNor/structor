@@ -1,9 +1,8 @@
 import React from 'react';
 import useFetch from 'utils/hooks/useFetch';
 import { IPatient } from 'types/IPatient';
-import { Card, Col, Row, Avatar, Table } from 'antd';
+import { Card, Col, Row, Table } from 'antd';
 import { Link } from 'react-router-dom';
-import { UserOutlined } from '@ant-design/icons';
 const PatientInfo = ({ patientID }: any) => {
     console.log(useFetch<IPatient>('fhir/Patient/'));
 
