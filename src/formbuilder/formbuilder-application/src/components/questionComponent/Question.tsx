@@ -12,12 +12,18 @@ type QuestionProps = {
 
 function Question({ id, removeQuestion }: QuestionProps): JSX.Element {
     const [placeholder, setPlaceholder] = useState('Spørsmål 1...');
+    const [input, setInput] = useState('');
     useEffect(() => {
         findPlaceholder();
+        setInput(input);
+        console.log(JSON.parse('questionnaire.json'));
     });
     function findPlaceholder() {
-        console.log(id + 1);
         setPlaceholder('Spørsmål ' + (id + 1) + '...');
+    }
+    function handleOnChange(input: string) {
+        console.log('Input: ', input);
+        setInput(input);
     }
     return (
         <div>
@@ -31,7 +37,11 @@ function Question({ id, removeQuestion }: QuestionProps): JSX.Element {
                                 padding: '5px',
                             }}
                         >
-                            <TextArea rows={1} placeholder={placeholder} />
+                            <Input
+                                placeholder={placeholder}
+                                value={input}
+                                onChange={(e) => handleOnChange(e.target.value)}
+                            />
                         </div>
                     </div>
                 </Col>

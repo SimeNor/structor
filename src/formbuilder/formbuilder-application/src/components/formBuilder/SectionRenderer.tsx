@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Row, Col, Button, Tooltip } from 'antd';
 import InputField from '../questionComponent/InputField';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
@@ -34,11 +34,11 @@ function Section({ id, removeSection }: SectionProps): JSX.Element {
         setQuestions(questions);
         setCount(count + 1);
     }
-
-    function removeQuestion(questionId: number) {
-        setQuestions(questions.filter((index) => index !== questionId));
-    }
-
+    const removeQuestion = useCallback((questionId) => {
+        setQuestions((questions) =>
+            questions.filter((index) => index !== questionId),
+        );
+    }, []);
     return (
         <div
             style={{
@@ -97,7 +97,7 @@ function Section({ id, removeSection }: SectionProps): JSX.Element {
                 <Col span={24}>
                     {questions.map((question, index) => [
                         <hr
-                            key={question}
+                            key={index}
                             style={{
                                 color: 'black',
                                 width: '100%',
