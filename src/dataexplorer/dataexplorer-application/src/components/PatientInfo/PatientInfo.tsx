@@ -1,7 +1,7 @@
 import React from 'react';
 import useFetch from 'utils/hooks/useFetch';
 import { IPatient } from 'types/IPatient';
-import { Card, Col, Row, Avatar } from 'antd';
+import { Card, Col, Row, Avatar, Table } from 'antd';
 import { Link } from 'react-router-dom';
 import { UserOutlined } from '@ant-design/icons';
 const PatientInfo = ({ patientID }: any) => {
@@ -18,16 +18,143 @@ const PatientInfo = ({ patientID }: any) => {
     return <div>no information</div>;
 };
 
+const dataSource = [
+    {
+        id: 1,
+        schemaName: 'covid',
+        submitted: '19.02.2020',
+    },
+    {
+        id: 2,
+        schemaName: 'covid',
+        submitted: '24.02.2020',
+    },
+    {
+        id: 3,
+        schemaName: 'covid',
+        submitted: '28.02.2020',
+    },
+    {
+        id: 4,
+        schemaName: 'covid',
+        submitted: '01.03.2020',
+    },
+    {
+        id: 5,
+        schemaName: 'covid',
+        submitted: '07.02.2020',
+    },
+    {
+        id: 6,
+        schemaName: 'covid',
+        submitted: '14.03.2020',
+    },
+    {
+        id: 7,
+        schemaName: 'covid',
+        submitted: '21.03.2020',
+    },
+    {
+        id: 8,
+        schemaName: 'covid',
+        submitted: '19.02.2020',
+    },
+    {
+        id: 9,
+        schemaName: 'covid',
+        submitted: '24.02.2020',
+    },
+    {
+        id: 10,
+        schemaName: 'covid',
+        submitted: '28.02.2020',
+    },
+    {
+        id: 11,
+        schemaName: 'lykke',
+        submitted: '01.03.2020',
+    },
+    {
+        id: 12,
+        schemaName: 'lykke',
+        submitted: '07.02.2020',
+    },
+    {
+        id: 13,
+        schemaName: 'covid',
+        submitted: '14.03.2020',
+    },
+    {
+        id: 14,
+        schemaName: 'lykke',
+        submitted: '21.03.2020',
+    },
+    {
+        id: 15,
+        schemaName: 'covid',
+        submitted: '19.02.2020',
+    },
+    {
+        id: 16,
+        schemaName: 'lykke',
+        submitted: '24.02.2020',
+    },
+    {
+        id: 17,
+        schemaName: 'covid',
+        submitted: '28.02.2020',
+    },
+    {
+        id: 18,
+        schemaName: 'lykke',
+        submitted: '01.03.2020',
+    },
+    {
+        id: 19,
+        schemaName: 'kreft',
+        submitted: '07.02.2020',
+    },
+    {
+        id: 20,
+        schemaName: 'covid',
+        submitted: '14.03.2020',
+    },
+    {
+        id: 21,
+        schemaName: 'covid',
+        submitted: '21.03.2020',
+    },
+];
+
+const columns = [
+    {
+        title: 'ID',
+        dataIndex: 'id',
+        key: 'id',
+    },
+    {
+        title: 'Skjemanavn',
+        dataIndex: 'schemaName',
+        key: 'skjemanavn',
+    },
+    {
+        title: 'Innsendt',
+        dataIndex: 'submitted',
+        key: 'submitted',
+    },
+];
+
 const displayPatientInfo = (response: IPatient) => {
     console.log(response);
 
     const name = response.name[0].given[0] + ' ' + response.name[0].family;
     return (
         <>
-            <Link to="./Pasient/SkjemaVisning">
-                <Row justify={'center'}>
-                    <Col span={8}>
+            <Row gutter={[1, 40]} justify="center">
+                <Col span={12}>
+                    <Link to="./Pasient/ListeVisning">
                         <Card
+                            style={{ marginTop: -73 }}
                             type="inner"
                             hoverable
                             key={response.id}
@@ -40,14 +167,12 @@ const displayPatientInfo = (response: IPatient) => {
                                     justifyContent: 'space-between',
                                 }}
                             >
-                                <Avatar
-                                    shape="square"
-                                    size={120}
-                                    icon={<UserOutlined />}
-                                />
-
                                 <div className="info-left">
-                                    <h1>Informasjon</h1>
+                                    {/* <b>
+                                        <i>
+                                            <h1>Personlig Informasjon</h1>
+                                        </i>
+                                    </b> */}
                                     <p>
                                         <b>Pnr: </b> {response.id}
                                     </p>
@@ -59,7 +184,11 @@ const displayPatientInfo = (response: IPatient) => {
                                     </p>
                                 </div>
                                 <div className="info-right">
-                                    <h1>Kontakt</h1>
+                                    {/* <b>
+                                        <i>
+                                            <h1>Kontakt</h1>
+                                        </i>
+                                    </b> */}
                                     <p>
                                         <b>Addresse: </b>
                                         {response.address[0].line[0]}
@@ -70,19 +199,21 @@ const displayPatientInfo = (response: IPatient) => {
                                     </p>
                                     <p>
                                         <b>E-post: </b>
-                                        erling.vande.weijer@gmail.com
+                                        eksempel@epost.no
                                     </p>
                                 </div>
                             </div>
                         </Card>
-                    </Col>
-                </Row>
-            </Link>
-            {/* // <div>navn: {response.name[0].given[0]}</div>
-            // <div>kjønn: {response.gender} </div>
-            // <div>Fødselsdato: {response.birthDate} </div>
-            // <div>Etternavn: {response.name[0].family} </div>
-            // <div>ID: {response.id}</div> */}
+                    </Link>
+                    <Table
+                        style={{ marginTop: 20 }}
+                        size="small"
+                        columns={columns}
+                        dataSource={dataSource}
+                        pagination={{ pageSize: 8 }}
+                    />
+                </Col>
+            </Row>
         </>
     );
 };
